@@ -9,15 +9,15 @@ import org.junit.*;
 
 import com.github.asufana.sql.ConnectionFactory.DatabaseType;
 
-public class ConnectionFactoryTest {
+public class ConnectionFactoryTest extends BaseTest {
     
-    private final String dbUrl = "jdbc:postgresql://127.0.0.1:5432/postgres";
-    private final String dbUser = "postgres";
+    private final String dbUrl = "jdbc:h2:mem:test";
+    private final String dbUser = "sa";
     private final String dbPass = "";
     
     @Test
     public void testCreate() {
-        final Connection conn = ConnectionFactory.create(DatabaseType.PostgreSQL,
+        final Connection conn = ConnectionFactory.create(DatabaseType.H2,
                                                          dbUrl,
                                                          dbUser,
                                                          dbPass);

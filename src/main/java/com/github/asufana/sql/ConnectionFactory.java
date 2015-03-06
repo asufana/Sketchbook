@@ -61,6 +61,7 @@ public class ConnectionFactory {
     }
     
     public static enum DatabaseType {
+        H2("org.h2.Driver"),
         PostgreSQL("org.postgresql.Driver"),
         MySQL("com.mysql.jdbc.Driver");
         
