@@ -11,8 +11,12 @@ import lombok.*;
  MicroORM orm = new MicroORM(connection);
  ORMTable<Member> memberTable = orm.on(Member.class);
 
+ //Prepare
+ orm.query("drop table if exists x").execute();
+
  //INSERT
- Row<Member> member = memberTable.insert("name","hana");
+ Map<String, Object> values = ...
+ Row<Member> member = memberTable.values(values).insert();
 
  //SELECT
  Row<Member> single = memberTable.where("name=?", name).select();
