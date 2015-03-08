@@ -6,9 +6,14 @@ import java.util.*;
 import org.h2.tools.*;
 import org.junit.*;
 
-import com.github.asufana.sql.ConnectionFactory.DatabaseType;
+import com.github.asufana.sql.functions.connection.*;
+import com.github.asufana.sql.functions.connection.ConnectionFactory.DatabaseType;
 
 public abstract class BaseTest {
+    
+    public static final String dbUrl = "jdbc:h2:mem:test";
+    public static final String dbUser = "sa";
+    public static final String dbPass = "";
     
     protected static Server h2;
     protected static Connection connection = null;
@@ -18,9 +23,9 @@ public abstract class BaseTest {
         h2 = Server.createWebServer(new String[] {"-webAllowOthers"});
         System.out.println("Database start.");
         connection = ConnectionFactory.create(DatabaseType.H2,
-                                              ConnectionFactoryTest.dbUrl,
-                                              ConnectionFactoryTest.dbUser,
-                                              ConnectionFactoryTest.dbPass);
+                                              dbUrl,
+                                              dbUser,
+                                              dbPass);
         System.out.println("Connect.");
         System.out.println("--------------");
     }

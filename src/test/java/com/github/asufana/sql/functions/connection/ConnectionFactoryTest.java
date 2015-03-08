@@ -1,4 +1,4 @@
-package com.github.asufana.sql;
+package com.github.asufana.sql.functions.connection;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -8,13 +8,11 @@ import java.sql.*;
 import org.h2.tools.*;
 import org.junit.*;
 
-import com.github.asufana.sql.ConnectionFactory.DatabaseType;
+import com.github.asufana.sql.*;
+import com.github.asufana.sql.functions.connection.ConnectionFactory.DatabaseType;
 
 public class ConnectionFactoryTest {
     
-    static final String dbUrl = "jdbc:h2:mem:test";
-    static final String dbUser = "sa";
-    static final String dbPass = "";
     private Server h2 = null;
     
     @Before
@@ -30,9 +28,9 @@ public class ConnectionFactoryTest {
     @Test
     public void testCreate() throws SQLException {
         final Connection conn = ConnectionFactory.create(DatabaseType.H2,
-                                                         dbUrl,
-                                                         dbUser,
-                                                         dbPass);
+                                                         BaseTest.dbUrl,
+                                                         BaseTest.dbUser,
+                                                         BaseTest.dbPass);
         assertThat(conn, is(notNullValue()));
         assertThat(conn.isClosed(), is(false));
         

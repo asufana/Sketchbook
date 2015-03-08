@@ -1,4 +1,4 @@
-package com.github.asufana.sql;
+package com.github.asufana.sql.functions.connection;
 
 import java.sql.*;
 

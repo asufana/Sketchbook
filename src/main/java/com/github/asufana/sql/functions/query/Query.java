@@ -1,4 +1,4 @@
-package com.github.asufana.sql;
+package com.github.asufana.sql.functions.query;
 
 import java.sql.*;
 import java.util.*;
@@ -35,11 +35,13 @@ public class Query {
         return prepareStatement;
     }
     
+    @Deprecated
     public static ResultSet executeQuery(final Connection connection,
                                          final String sql) {
         return executeQuery(connection, sql, Collections.emptyList());
     }
     
+    @Deprecated
     public static ResultSet executeQuery(final Connection connection,
                                          final String sql,
                                          final List<Object> params) {
@@ -51,7 +53,29 @@ public class Query {
         catch (final SQLException e) {
             throw new MicroORMException(e, null, sql);
         }
-        
+    }
+    
+    public static <R> R executeQuery(final Connection connection,
+                                     final String sql,
+                                     final ResultSetCallback<R> callback) {
+        return executeQuery(connection, sql, Collections.emptyList(), callback);
+    }
+    
+    public static <R> R executeQuery(final Connection connection,
+                                     final String sql,
+                                     final List<Object> params,
+                                     final ResultSetCallback<R> callback) {
+        try (PreparedStatement prepareStatement = connection.prepareStatement(sql)) {
+            final PreparedStatement paramdPreparedStatement = setParameters(prepareStatement,
+                                                                            params);
+            try (final ResultSet rs = paramdPreparedStatement.executeQuery()) {
+                rs.next();
+                return callback.apply(rs);
+            }
+        }
+        catch (final SQLException e) {
+            throw new MicroORMException(e, null, sql);
+        }
     }
     
 }
