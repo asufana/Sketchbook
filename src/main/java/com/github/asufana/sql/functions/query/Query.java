@@ -35,26 +35,6 @@ public class Query {
         return prepareStatement;
     }
     
-    @Deprecated
-    public static ResultSet executeQuery(final Connection connection,
-                                         final String sql) {
-        return executeQuery(connection, sql, Collections.emptyList());
-    }
-    
-    @Deprecated
-    public static ResultSet executeQuery(final Connection connection,
-                                         final String sql,
-                                         final List<Object> params) {
-        try (PreparedStatement prepareStatement = connection.prepareStatement(sql)) {
-            final PreparedStatement paramdPreparedStatement = setParameters(prepareStatement,
-                                                                            params);
-            return paramdPreparedStatement.executeQuery();
-        }
-        catch (final SQLException e) {
-            throw new MicroORMException(e, null, sql);
-        }
-    }
-    
     public static <R> R executeQuery(final Connection connection,
                                      final String sql,
                                      final ResultSetCallback<R> callback) {
@@ -69,13 +49,11 @@ public class Query {
             final PreparedStatement paramdPreparedStatement = setParameters(prepareStatement,
                                                                             params);
             try (final ResultSet rs = paramdPreparedStatement.executeQuery()) {
-                rs.next();
                 return callback.apply(rs);
             }
         }
         catch (final SQLException e) {
-            throw new MicroORMException(e, null, sql);
+            throw new MicroORMException(e, sql);
         }
     }
-    
 }

@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import com.github.asufana.sql.*;
-import com.github.asufana.sql.functions.query.*;
 
 public class QueryTest extends BaseTest {
     
@@ -24,10 +23,21 @@ public class QueryTest extends BaseTest {
         assertThat(Query.execute(connection,
                                  "INSERT INTO x (name) VALUES (?),(?)",
                                  toList("foo", "bar")), is(2));
-        assertThat(Query.executeQuery(connection,
-                                      "SELECT * FROM x",
-                                      rs -> rs.getString("name")),
-                   is("foo"));
+        assertThat(Query.executeQuery(connection, "SELECT * FROM x", rs -> {
+            rs.next();
+            return rs.getString("name");
+        }), is("foo"));
+    }
+    
+    @Test
+    public void testExecuteQueryWithRowList() {
+        assertThat(Query.execute(connection,
+                                 "INSERT INTO x (name) VALUES (?),(?)",
+                                 toList("foo", "bar")), is(2));
+        assertThat(Query.executeQuery(connection, "SELECT * FROM x", rs -> {
+            rs.next();
+            return rs.getString("name");
+        }), is("foo"));
     }
     
 }

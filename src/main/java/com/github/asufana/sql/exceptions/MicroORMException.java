@@ -13,10 +13,20 @@ public class MicroORMException extends RuntimeException {
     private final String message;
     private final String sql;
     
+    public MicroORMException(final String message) {
+        this(null, message, null);
+    }
+    
     public MicroORMException(final Exception exception) {
         this(exception, String.format("%s: %s",
                                       exception.getClass().getSimpleName(),
                                       exception.getMessage()), null);
+    }
+    
+    public MicroORMException(final Exception exception, final String sql) {
+        this(exception, String.format("%s: %s",
+                                      exception.getClass().getSimpleName(),
+                                      exception.getMessage()), sql);
     }
     
     public MicroORMException(final Exception exception,

@@ -9,7 +9,7 @@ import lombok.*;
  * interface plan
 
  MicroORM orm = new MicroORM(connection);
- ORMTable<Member> memberTable = orm.on(Member.class);
+ EntityManager<Member> memberTable = orm.on(Member.class);
 
  //Prepare
  orm.query("drop table if exists x").execute();
@@ -41,15 +41,13 @@ import lombok.*;
 public class MicroORM {
     
     private final Connection connection;
-    private Class<?> klass;
     
     public MicroORM(final Connection connection) {
         this.connection = connection;
     }
     
-    public <T> MicroORM on(final Class<T> klass) {
-        this.klass = klass;
-        return this;
+    public <T> EntityManager<T> on(final Class<T> klass) {
+        return new EntityManager<T>(connection, klass);
     }
     
     public <T> T first() {
