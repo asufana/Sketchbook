@@ -1,5 +1,6 @@
 package com.github.asufana.sql.functions.mapping;
 
+import java.lang.reflect.*;
 import java.sql.*;
 import java.util.*;
 
@@ -18,12 +19,13 @@ public class RowFactory {
             }
             return new RowList<T>(rows);
         }
-        catch (final SQLException e) {
+        catch (final SQLException | IllegalArgumentException
+                | IllegalAccessException e) {
             throw new MicroORMException(e);
         }
     }
     
-    private static <T> T newInstance(final Class<T> klass, final ResultSet rs) throws SQLException {
+    private static <T> T newInstance(final Class<T> klass, final ResultSet rs) throws IllegalArgumentException, IllegalAccessException, SQLException {
         final T instance = createInstance(klass);
         return setFields(instance, rs);
     }
@@ -32,13 +34,38 @@ public class RowFactory {
         return objenesis.newInstance(klass);
     }
     
-    private static <T> T setFields(final T instance, final ResultSet rs) throws SQLException {
+    private static <T> T setFields(final T instance, final ResultSet rs) throws SQLException, IllegalArgumentException, IllegalAccessException {
+        final FieldList fieldList = new FieldList(instance.getClass());
         final ResultSetMetaData meta = rs.getMetaData();
         for (int i = 0; i < meta.getColumnCount(); i++) {
             final String columnName = meta.getColumnName(i + 1);
             final Object value = rs.getObject(i + 1);
+            final Field field = fieldList.get(columnName.toLowerCase());
+            if (field != null) {
+                field.setAccessible(true);
+                field.set(instance, value);
+            }
         }
         return instance;
+    }
+    
+    static class FieldList {
+        private final Map<String, Field> fieldMap = new HashMap<>();
+        
+        public FieldList(final Class<?> klass) {
+            final List<Field> fields = Arrays.asList(klass.getDeclaredFields());
+            for (final Field field : fields) {
+                final String fieldName = field.getName();
+                if (fieldMap.containsKey(fieldName)) {
+                    throw new MicroORMException("フィールド名が重複しています：" + fieldName);
+                }
+                fieldMap.put(fieldName, field);
+            }
+        }
+        
+        public Field get(final String fieldName) {
+            return fieldMap.get(fieldName);
+        }
     }
     
 }

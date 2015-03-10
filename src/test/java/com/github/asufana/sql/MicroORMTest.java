@@ -24,14 +24,14 @@ public class MicroORMTest extends BaseTest {
     }
     
     @Test
-    public void test() {
+    public void testSelect() {
         final MicroORM orm = new MicroORM(connection);
         final EntityManager<Member> em = orm.on(Member.class);
         final Row<Member> row = em.where("select * from x where name=?",
-                                       toList("foo")).select();
+                                         toList("foo")).select();
         assertThat(row, is(notNullValue()));
         
-        Member member = row.get();
+        final Member member = row.get();
         assertThat(member.name(), is("foo"));
     }
     
