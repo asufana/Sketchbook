@@ -15,9 +15,10 @@ public class MicroORMTest extends BaseTest {
     
     private final MicroORM orm = new MicroORM(connection);
     
-    //TODO @Id annotation
-    //TODO @Table annotation
+    //TODO multi @PK annotation
     //TODO insert return value
+    //TODO multi select
+    //TODO parameterd count()
     
     @Before
     @Test
@@ -70,6 +71,7 @@ public class MicroORMTest extends BaseTest {
     @Table("x")
     @Getter
     public static class Member {
+        @PK
         private final Integer id;
         private final String name;
         

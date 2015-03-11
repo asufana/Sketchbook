@@ -1,5 +1,6 @@
 package com.github.asufana.sql;
 
+import java.lang.reflect.*;
 import java.sql.*;
 import java.util.*;
 import java.util.stream.*;
@@ -26,6 +27,17 @@ public class EntityManager<T> {
         return annotation != null
                 ? annotation.value()
                 : klass.getSimpleName();
+    }
+    
+    private List<Field> pkFields() {
+        return Arrays.asList(klass.getFields())
+                     .stream()
+                     .filter(field -> field.getAnnotation(PK.class) != null)
+                     .collect(Collectors.toList());
+    }
+    
+    private Field pkField() {
+        return pkFields().get(0);
     }
     
     public Integer count() {
