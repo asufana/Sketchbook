@@ -21,7 +21,7 @@ public class EntityManager<T> {
         this.klass = klass;
     }
     
-    protected String tableName() {
+    private String tableName() {
         final Table annotation = klass.getAnnotation(Table.class);
         return annotation != null
                 ? annotation.value()
@@ -57,11 +57,11 @@ public class EntityManager<T> {
                                     insertValues()));
     }
     
-    protected String insertColumns() {
+    private String insertColumns() {
         return values.keySet().stream().collect(Collectors.joining(","));
     }
     
-    protected String insertValues() {
+    private String insertValues() {
         return values.values()
                      .stream()
                      .collect(Collectors.joining(",", "'", "'"));
@@ -86,7 +86,7 @@ public class EntityManager<T> {
         return select();
     }
     
-    protected String updateValues() {
+    private String updateValues() {
         return "name='bar'";
 //        return values.entrySet().stream()
 //              .map((k, v) -> String.format("%s=%s", k,v))
