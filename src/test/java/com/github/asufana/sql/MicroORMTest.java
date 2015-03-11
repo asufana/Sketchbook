@@ -2,6 +2,9 @@ package com.github.asufana.sql;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
+
+import java.util.*;
+
 import lombok.*;
 
 import org.junit.*;
@@ -51,15 +54,17 @@ public class MicroORMTest extends BaseTest {
         assertThat(em.where("NAME=?", "bar").select().get().name(), is("bar"));
     }
     
-//    @Test
-//    public void testSelectList() {
-//        final EntityManager<Member> em = orm.on(Member.class);
-//        final Row<Member> row = em.where("NAME=?", "foo").select();
-//        assertThat(row, is(notNullValue()));
-//
-//        final Member member = row.get();
-//        assertThat(member.name(), is("foo"));
-//    }
+    @Test
+    public void testSelectList() {
+        final EntityManager<Member> em = orm.on(Member.class);
+        final RowList<Member> rows = em.where("NAME in (?,?)", "foo", "bar")
+                                       .selectList();
+        assertThat(rows, is(notNullValue()));
+        
+        final List<Member> members = rows.toList();
+        assertThat(members, is(notNullValue()));
+        assertThat(members.size(), is(2));
+    }
     
     @Test
     public void testUpdate() {

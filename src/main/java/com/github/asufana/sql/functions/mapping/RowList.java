@@ -1,6 +1,7 @@
 package com.github.asufana.sql.functions.mapping;
 
 import java.util.*;
+import java.util.stream.*;
 
 public class RowList<T> {
     
@@ -21,6 +22,10 @@ public class RowList<T> {
     
     public boolean isEmpty() {
         return rows.size() == 0;
+    }
+    
+    public List<T> toList() {
+        return rows.stream().map(row -> row.get()).collect(Collectors.toList());
     }
     
     @SuppressWarnings("unchecked")
