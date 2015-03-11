@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.*;
 
+import com.github.asufana.sql.annotations.*;
 import com.github.asufana.sql.functions.mapping.*;
 import com.github.asufana.sql.functions.query.*;
 
@@ -21,7 +22,10 @@ public class EntityManager<T> {
     }
     
     protected String tableName() {
-        return klass.getSimpleName();
+        final Table annotation = klass.getAnnotation(Table.class);
+        return annotation != null
+                ? annotation.value()
+                : klass.getSimpleName();
     }
     
     public Integer count() {

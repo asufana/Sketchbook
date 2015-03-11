@@ -6,6 +6,7 @@ import lombok.*;
 
 import org.junit.*;
 
+import com.github.asufana.sql.annotations.*;
 import com.github.asufana.sql.functions.mapping.*;
 import com.github.asufana.sql.functions.query.*;
 import com.github.asufana.sql.functions.util.*;
@@ -22,9 +23,8 @@ public class MicroORMTest extends BaseTest {
     @Test
     public void testExecute() {
         //CREATE TABLE
-        assertThat(Query.execute(connection, "DROP TABLE IF EXISTS member"),
-                   is(0));
-        assertThat(Query.execute(connection, "CREATE TABLE member ("
+        assertThat(Query.execute(connection, "DROP TABLE IF EXISTS x"), is(0));
+        assertThat(Query.execute(connection, "CREATE TABLE x ("
                 + "id integer unsigned auto_increment primary key,"
                 + "name varchar(255) not null)"), is(0));
         
@@ -67,6 +67,7 @@ public class MicroORMTest extends BaseTest {
         assertThat(em.count(), is(0));
     }
     
+    @Table("x")
     @Getter
     public static class Member {
         private final Integer id;
