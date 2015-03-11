@@ -34,7 +34,9 @@ public class MicroORMTest extends BaseTest {
         assertThat(em.count(), is(0));
         em.values(new MapBuilder<String, String>().put("name", "foo").build())
           .insert();
-        assertThat(em.count(), is(1));
+        em.values(new MapBuilder<String, String>().put("name", "bar").build())
+          .insert();
+        assertThat(em.count(), is(2));
     }
     
     @Test
@@ -45,7 +47,19 @@ public class MicroORMTest extends BaseTest {
         
         final Member member = row.get();
         assertThat(member.name(), is("foo"));
+        
+        assertThat(em.where("NAME=?", "bar").select().get().name(), is("bar"));
     }
+    
+//    @Test
+//    public void testSelectList() {
+//        final EntityManager<Member> em = orm.on(Member.class);
+//        final Row<Member> row = em.where("NAME=?", "foo").select();
+//        assertThat(row, is(notNullValue()));
+//
+//        final Member member = row.get();
+//        assertThat(member.name(), is("foo"));
+//    }
     
     @Test
     public void testUpdate() {
@@ -65,7 +79,7 @@ public class MicroORMTest extends BaseTest {
     public void testDelete() {
         final EntityManager<Member> em = orm.on(Member.class);
         assertThat(em.where("NAME=?", "foo").delete(), is(1));
-        assertThat(em.count(), is(0));
+        assertThat(em.count(), is(1));
     }
     
     @Table("x")

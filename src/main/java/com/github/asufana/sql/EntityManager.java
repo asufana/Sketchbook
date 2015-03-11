@@ -5,6 +5,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.commons.lang3.*;
+
 import com.github.asufana.sql.annotations.*;
 import com.github.asufana.sql.functions.mapping.*;
 import com.github.asufana.sql.functions.query.*;
@@ -41,9 +43,20 @@ public class EntityManager<T> {
     }
     
     public Integer count() {
+        return count(null, null);
+    }
+    
+    private Integer count(final String sql, final List<Object> params) {
+        final String whereString = StringUtils.isNotEmpty(sql)
+                ? "WHERE " + sql
+                : "";
         return Query.executeQuery(connection,
-                                  String.format("SELECT count(*) FROM %s",
-                                                tableName()),
+                                  String.format("SELECT count(*) FROM %s %s",
+                                                tableName(),
+                                                whereString),
+                                  params != null && params.size() != 0
+                                          ? params
+                                          : Collections.emptyList(),
                                   rs -> {
                                       rs.next();
                                       return rs.getInt(1);
@@ -80,14 +93,16 @@ public class EntityManager<T> {
     }
     
     public Row<T> select() {
-        final RowList<T> rowList = Query.executeQuery(connection,
-                                                      String.format("SELECT * FROM %s WHERE %s",
-                                                                    tableName(),
-                                                                    sql),
-                                                      params,
-                                                      rs -> RowFactory.create(klass,
-                                                                              rs));
-        return rowList.first();
+        return selectList().first();
+    }
+    
+    public RowList<T> selectList() {
+        return Query.executeQuery(connection,
+                                  String.format("SELECT * FROM %s WHERE %s",
+                                                tableName(),
+                                                sql),
+                                  params,
+                                  rs -> RowFactory.create(klass, rs));
     }
     
     public Row<T> update() {
