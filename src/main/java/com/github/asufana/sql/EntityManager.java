@@ -54,9 +54,7 @@ public class EntityManager<T> {
                                   String.format("SELECT count(*) FROM %s %s",
                                                 tableName(),
                                                 whereString),
-                                  params != null && params.size() != 0
-                                          ? params
-                                          : Collections.emptyList(),
+                                  params,
                                   rs -> {
                                       rs.next();
                                       return rs.getInt(1);

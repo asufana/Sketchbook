@@ -26,7 +26,7 @@ public class Query {
     
     private static PreparedStatement setParameters(final PreparedStatement prepareStatement,
                                                    final List<Object> params) throws SQLException {
-        if (params.size() == 0) {
+        if (params == null || params.size() == 0) {
             return prepareStatement;
         }
         for (int i = 0; i < params.size(); i++) {
