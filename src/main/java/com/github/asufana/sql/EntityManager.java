@@ -2,37 +2,99 @@ package com.github.asufana.sql;
 
 import java.sql.*;
 import java.util.*;
-
-import lombok.*;
+import java.util.stream.*;
 
 import com.github.asufana.sql.functions.mapping.*;
 import com.github.asufana.sql.functions.query.*;
 
-@Getter
 public class EntityManager<T> {
     
     private final Connection connection;
     private final Class<T> klass;
     private String sql;
     private List<Object> params;
+    private Map<String, String> values;
     
     EntityManager(final Connection connection, final Class<T> klass) {
         this.connection = connection;
         this.klass = klass;
     }
     
-    public EntityManager<T> where(final String sql, final List<Object> params) {
+    protected String tableName() {
+        return klass.getSimpleName();
+    }
+    
+    public Integer count() {
+        return Query.executeQuery(connection,
+                                  String.format("SELECT count(*) FROM %s",
+                                                tableName()),
+                                  rs -> {
+                                      rs.next();
+                                      return rs.getInt(1);
+                                  });
+    }
+    
+    public EntityManager<T> where(final String sql, final Object... params) {
         this.sql = sql;
-        this.params = params;
+        this.params = Arrays.asList(params);
         return this;
+    }
+    
+    public EntityManager<T> values(final Map<String, String> values) {
+        this.values = values;
+        return this;
+    }
+    
+    public void insert() {
+        Query.execute(connection,
+                      String.format("INSERT INTO %s (%s) VALUES (%s)",
+                                    tableName(),
+                                    insertColumns(),
+                                    insertValues()));
+    }
+    
+    protected String insertColumns() {
+        return values.keySet().stream().collect(Collectors.joining(","));
+    }
+    
+    protected String insertValues() {
+        return values.values()
+                     .stream()
+                     .collect(Collectors.joining(",", "'", "'"));
     }
     
     public Row<T> select() {
         final RowList<T> rowList = Query.executeQuery(connection,
-                                                      sql,
+                                                      String.format("SELECT * FROM %s WHERE %s",
+                                                                    tableName(),
+                                                                    sql),
                                                       params,
                                                       rs -> RowFactory.create(klass,
                                                                               rs));
         return rowList.first();
     }
+    
+    public Row<T> update() {
+        Query.execute(connection, String.format("UPDATE %s SET %s WHERE %s",
+                                                tableName(),
+                                                updateValues(),
+                                                sql), params);
+        return select();
+    }
+    
+    protected String updateValues() {
+        return "name='bar'";
+//        return values.entrySet().stream()
+//              .map((k, v) -> String.format("%s=%s", k,v))
+//                     .collect(Collectors.joining(","));
+    }
+    
+    public Integer delete() {
+        return Query.execute(connection,
+                             String.format("DELETE FROM %s WHERE %s",
+                                           tableName(),
+                                           sql),
+                             params);
+    }
+    
 }

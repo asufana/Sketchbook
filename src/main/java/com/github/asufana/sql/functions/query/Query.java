@@ -20,7 +20,7 @@ public class Query {
             return paramdPreparedStatement.executeUpdate();
         }
         catch (final SQLException e) {
-            throw new MicroORMException(e, null, sql);
+            throw new MicroORMException(e, sql);
         }
     }
     
