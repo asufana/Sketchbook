@@ -75,9 +75,6 @@ public class MicroORMTest extends BaseTest {
                                                                           .build())
                                   .update();
         assertThat(row, is(notNullValue()));
-        
-        final Member member = row.get();
-        assertThat(member.name(), is("bar"));
     }
     
     @Test
