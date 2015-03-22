@@ -90,6 +90,11 @@
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.insightfullogic</groupId>
+			<artifactId>lambda-behave</artifactId>
+			<version>0.3</version>
+		</dependency>
 	</dependencies>
 
 	<scm>
