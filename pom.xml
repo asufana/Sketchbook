@@ -32,13 +32,26 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
-				<!--
-				<execution>
-					<goals>
-						<goal>ajc</goal>
-					</goals>
-				</execution>
-			     -->	
+				<!-- <execution> <goals> <goal>ajc</goal> </goals> </execution> -->
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>target/generated-sources/annotations</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -51,12 +64,19 @@
 	</pluginRepositories>
 
 	<dependencies>
+		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.insightfullogic</groupId>
+			<artifactId>lambda-behave</artifactId>
+			<version>0.3</version>
+		</dependency>
+		<!-- Log -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -67,6 +87,7 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.10</version>
 		</dependency>
+		<!-- Utils -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -79,29 +100,9 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.186</version>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>9.4-1201-jdbc41</version>
-		</dependency>
-		<dependency>
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
 			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>io.undertow</groupId>
-			<artifactId>undertow-core</artifactId>
-			<version>1.1.0.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>io.undertow</groupId>
-			<artifactId>undertow-servlet</artifactId>
-			<version>1.1.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -113,11 +114,29 @@
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
 		</dependency>
+		<!-- DBMS -->
 		<dependency>
-			<groupId>com.insightfullogic</groupId>
-			<artifactId>lambda-behave</artifactId>
-			<version>0.3</version>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.186</version>
 		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4-1201-jdbc41</version>
+		</dependency>
+		<!-- Web -->
+		<dependency>
+			<groupId>io.undertow</groupId>
+			<artifactId>undertow-core</artifactId>
+			<version>1.1.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>io.undertow</groupId>
+			<artifactId>undertow-servlet</artifactId>
+			<version>1.1.0.Final</version>
+		</dependency>
+		<!-- AspectJ -->
 		<dependency>
 			<groupId>com.jcabi</groupId>
 			<artifactId>jcabi-aspects</artifactId>
@@ -127,6 +146,12 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>1.8.5</version>
+		</dependency>
+		<!-- APT -->
+		<dependency>
+			<groupId>in.tombo</groupId>
+			<artifactId>ponto</artifactId>
+			<version>1.0.9</version>
 		</dependency>
 	</dependencies>
 
