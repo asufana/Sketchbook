@@ -30,8 +30,9 @@ public class RowFactory {
         return setFields(instance, rs);
     }
     
+    @SuppressWarnings("unchecked")
     private static <T> T createInstance(final Class<T> klass) {
-        return objenesis.newInstance(klass);
+        return (T) objenesis.newInstance(klass);
     }
     
     private static <T> T setFields(final T instance, final ResultSet rs) throws SQLException, IllegalArgumentException, IllegalAccessException {
