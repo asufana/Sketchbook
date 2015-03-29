@@ -153,6 +153,12 @@
 			<artifactId>ponto</artifactId>
 			<version>1.0.9</version>
 		</dependency>
+		<!-- ValueObject -->
+		<dependency>
+			<groupId>com.google.auto.value</groupId>
+			<artifactId>auto-value</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<scm>
