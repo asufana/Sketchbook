@@ -159,6 +159,17 @@
 			<artifactId>auto-value</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<!-- ByteCode -->
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>0.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+			<version>0.6.3</version>
+		</dependency>
 	</dependencies>
 
 	<scm>
