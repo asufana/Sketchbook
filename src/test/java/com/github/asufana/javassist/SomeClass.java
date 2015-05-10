@@ -1,10 +1,5 @@
 package com.github.asufana.javassist;
 
-public class SomeClass {
+public class SomeClass extends SomeAbstractClass {
     
-    public final String hoge;
-    
-    public SomeClass(final String hoge) {
-        this.hoge = hoge;
-    }
 }
